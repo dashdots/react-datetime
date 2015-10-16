@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import ReactDOM from 'react-dom';
-import moment from'moment';
+import moment from 'moment';
 import DaysView from './src/DaysView';
 import MonthsView from './src/MonthsView';
 import TimeView from './src/TimeView';

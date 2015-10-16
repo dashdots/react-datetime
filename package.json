@@ -7,7 +7,7 @@
     "type": "git",
     "url": "https://github.com/dashdots/react-datetime/"
   },
-  "main": "./DateTime.js",
+  "main": "./dist/datetime.js",
   "keywords": [
     "react",
     "react-component",

@@ -5,6 +5,7 @@ class DateTimePickerYears extends Component {
     let year = Number.parseInt(this.props.viewDate.year() / 10, 10) * 10;
 
     return (
+      <div className='ReactDatetime-Years'>
         <table key="a">
           <thead>
           <tr>

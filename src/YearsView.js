@@ -1,63 +1,75 @@
-'use strict';
+import React, {Component} from 'react';
 
-var React = require('react');
+class DateTimePickerYears extends Component {
+  render() {
+    let year = Number.parseInt(this.props.viewDate.year() / 10, 10) * 10;
 
-var DOM = React.DOM;
-var DateTimePickerYears = React.createClass({
-	render: function() {
-		var year = parseInt(this.props.viewDate.year() / 10, 10) * 10;
+    return (
+        <table key="a">
+          <thead>
+          <tr>
+            <th key="prev" className="prev">
+              <button onClick={this.props.subtractTime(10, 'years')} type="button">‹</button>
+            </th>
+            <th key="year" className="switch" onClick={this.props.showView('years')} colSpan="2">
+              {year + '-' + (year + 9)}
+            </th>
+            <th key="next" className="next">
+              <button onClick={this.props.addTime(10, 'years')} type="button">›</button>
+            </th>
+          </tr>
+          </thead>
+        </table>
+        <table key="years">
+          <tbody>
+          {this.renderYears(year)}
+          </tbody>
+        </table>
+      </div>
+    );
+  }
 
-		return DOM.div({ className: 'rdtYears' },[
-			DOM.table({ key: 'a'}, DOM.thead({}, DOM.tr({},[
-				DOM.th({ key: 'prev', className: 'prev' }, DOM.button({onClick: this.props.subtractTime(10, 'years'), type: 'button' }, '‹')),
-				DOM.th({ key: 'year', className: 'switch', onClick: this.props.showView('years'), colSpan: 2 }, year + '-' + (year + 9) ),
-				DOM.th({ key: 'next', className: 'next'}, DOM.button({onClick: this.props.addTime(10, 'years'), type: 'button' }, '›'))
-				]))),
-			DOM.table({ key: 'years'}, DOM.tbody({}, this.renderYears( year )))
-		]);
-	},
+  renderYears( year ) {
+    let years = [],
+      i = -1,
+      rows = [],
+      renderer = this.props.renderYear || this.renderYear.bind(this),
+      selectedDate = this.props.selectedDate,
+      classes, props
+      ;
 
-	renderYears: function( year ) {
-		var years = [],
-			i = -1,
-			rows = [],
-			renderer = this.props.renderYear || this.renderYear,
-			selectedDate = this.props.selectedDate,
-			classes, props
-		;
+    year--;
+    while (i < 11) {
+      classes = 'year';
+      if( i === -1 | i === 10 )
+        classes += ' old';
+      if( selectedDate && selectedDate.year() === year )
+        classes += ' active';
 
-		year--;
-		while (i < 11) {
-			classes = 'year';
-			if( i === -1 | i === 10 )
-				classes += ' old';
-			if( selectedDate && selectedDate.year() === year )
-				classes += ' active';
+      props = {
+        key: year,
+        'data-value': year,
+        className: classes,
+        onClick: this.props.setDate('year')
+      };
 
-			props = {
-				key: year,
-				'data-value': year,
-				className: classes,
-				onClick: this.props.setDate('year')
-			};
+      years.push( renderer( props, year, selectedDate && selectedDate.clone() ));
 
-			years.push( renderer( props, year, selectedDate && selectedDate.clone() ));
+      if( years.length == 4 ){
+        rows.push(<tr key={i}>{years}</tr>);
+        years = [];
+      }
 
-			if( years.length == 4 ){
-				rows.push( DOM.tr({ key: i }, years ) );
-				years = [];
-			}
+      year++;
+      i++;
+    }
 
-			year++;
-			i++;
-		}
+    return rows;
+  }
 
-		return rows;
-	},
+  renderYear( props, year, selectedDate ){
+    return <td {...props}>{year}</td>;
+  }
+}
 
-	renderYear: function( props, year, selectedDate ){
-		return DOM.td( props, year );
-	}
-});
-
-module.exports = DateTimePickerYears;
+export default DateTimePickerYears;
